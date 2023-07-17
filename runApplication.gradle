@@ -1,0 +1,5 @@
+apply plugin: 'java'
+task runApplication(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.mauricio.gastos' // Reemplaza con la clase principal de tu aplicación
+}
