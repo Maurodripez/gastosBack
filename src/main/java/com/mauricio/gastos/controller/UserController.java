@@ -1,10 +1,8 @@
 package com.mauricio.gastos.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mauricio.gastos.DTO.RoleDTO;
-import com.mauricio.gastos.models.ERole;
 import com.mauricio.gastos.service.RoleServiceImpl;
 import com.mauricio.gastos.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
