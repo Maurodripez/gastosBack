@@ -3,6 +3,7 @@ package com.mauricio.gastos.controller;
 import java.util.List;
 
 import com.mauricio.gastos.DTO.RoleDTO;
+import com.mauricio.gastos.service.EmailServiceImpl;
 import com.mauricio.gastos.service.RoleServiceImpl;
 import com.mauricio.gastos.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/users")
 public class UserController {
 
+	@Autowired
+	EmailServiceImpl emailService;
 	@Autowired
 	private RoleServiceImpl roleService;
 
@@ -44,6 +47,7 @@ public class UserController {
 	public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
 		try {
 			UserDTO createdUser = userService.createUser(userDTO);
+			emailService.mailSenderVerification(userDTO.getEmail(), userDTO.getUsername());
 			return ResponseEntity.ok(createdUser);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
