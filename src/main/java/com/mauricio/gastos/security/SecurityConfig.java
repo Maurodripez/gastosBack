@@ -34,8 +34,7 @@ public class SecurityConfig {
 	JwtAuthorizationFilter jwtAuthorizationFilter;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager)
-			throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
 		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
 		jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
 		jwtAuthenticationFilter.setFilterProcessesUrl("/login");
@@ -52,7 +51,7 @@ public class SecurityConfig {
 				.csrf(config -> config.disable())
 				.cors(config -> config.configurationSource(corsConfigurationSource))
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/api/users/prueba").permitAll();
+					auth.requestMatchers("/api/users/createUser","/api/users/validTokenEmail/**").permitAll();
 					auth.anyRequest().authenticated();
 				})
 				.sessionManagement(session -> {

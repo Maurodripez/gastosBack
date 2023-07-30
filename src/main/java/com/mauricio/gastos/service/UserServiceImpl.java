@@ -54,6 +54,8 @@ public class UserServiceImpl implements UserService {
                 .username(userDTO.getUsername())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .email(userDTO.getEmail())
+                .name(userDTO.getName())
+                .lastname(userDTO.getLastname())
                 .roles(roles)
                 .build();
 
@@ -130,11 +132,36 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean validUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean validEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean validTokenEmail(String token) {
+        if(jwtUtils.isTokenValid(token)){
+            String username = jwtUtils.getUsernameFromToken(token);
+            if(userRepository.existsByUsername(username) && !userRepository.isVerify(username)){
+               userRepository.changeVerify(username, true);
+               return true;
+            }
+        }
+        return false;
+    }
+
+    //De entity a DTO
     private UserDTO showUser(UserEntity userEntity) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userEntity.getId());
         userDTO.setUsername(userEntity.getUsername());
         userDTO.setEmail(userEntity.getEmail());
+        userDTO.setName(userEntity.getName());
+        userDTO.setLastname(userEntity.getLastname());
         Set<String> roles = userEntity.getRoles().stream()
                 .map(roleEntity -> roleEntity.getName().toString())
                 .collect(Collectors.toSet());

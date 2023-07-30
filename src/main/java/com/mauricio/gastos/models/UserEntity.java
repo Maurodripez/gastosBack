@@ -44,6 +44,14 @@ public class UserEntity {
 	@Size(max = 30)
 	private String username;
 
+	@NotBlank
+	@Size(max = 80)
+	private String name;
+
+	@NotBlank
+	@Size(max = 80)
+	private String lastname;
+
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity.class, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<RoleEntity> roles;
