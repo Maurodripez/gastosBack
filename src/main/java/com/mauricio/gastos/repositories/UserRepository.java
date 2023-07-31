@@ -14,9 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	Optional<UserEntity> findByUsername(String username);
 
-	@Query("SELECT respuesta FROM UserEntity respuesta WHERE respuesta.username = ?1")
-	Optional<UserEntity> getName(String username);
-
 	boolean existsByUsername(String username);
 
 	boolean existsByEmail(String email);
@@ -33,5 +30,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Modifying
 	@Query("UPDATE UserEntity u SET u.verify = :verify WHERE u.username = :username")
 	void changeVerify(String username, boolean verify);
+
+	@Query("SELECT u.email FROM UserEntity u WHERE u.username = :username")
+	Optional<String> findEmailByUsername(String username);
+
+	@Query("SELECT COUNT(u) FROM UserEntity u WHERE u.username = :username AND verify = true")
+	int emailIsVerify(String username);
+
 
 }

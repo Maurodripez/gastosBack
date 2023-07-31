@@ -1,5 +1,6 @@
 package com.mauricio.gastos.service;
 
+import com.mauricio.gastos.repositories.UserRepository;
 import com.mauricio.gastos.securityjwt.JwtUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,6 +30,8 @@ public class EmailServiceImpl implements EmailService{
     private String remitente;
 
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     private TemplateEngine templateEngine;
     @Override
     public void mailSenderVerification(String destinatario, String nombreUsuario) {
@@ -36,12 +41,27 @@ public class EmailServiceImpl implements EmailService{
             helper.setFrom(remitente);
             helper.setTo(destinatario);
             helper.setSubject("Verificacion de correo electronico");
-            String contenidoPlantilla = cargarContenidoPlantilla(nombreUsuario, "https://www.estaurlconjwt.com/verificar?token="+jwtUtils.generateTokenValidate(nombreUsuario));
+            String contenidoPlantilla = cargarContenidoPlantilla(nombreUsuario, "http://localhost:3000/verification-email?token="+jwtUtils.generateTokenValidate(nombreUsuario));
             helper.setText(contenidoPlantilla, true);
 
             javaMailSender.send(mensaje);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean resendValidationEmail(String username) {
+        try {
+            Optional<String> emailByUsername = userRepository.findEmailByUsername(username);
+            if(emailByUsername.isPresent()){
+                mailSenderVerification(emailByUsername.get(),username);
+                return true;
+            }else{
+                return false;
+            }
+        }catch (Exception e){
+            return false;
         }
     }
 

@@ -154,6 +154,12 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Override
+    public boolean emailIsVerify(String username) {
+        int v = userRepository.emailIsVerify(username);
+        return userRepository.emailIsVerify(username) > 0;
+    }
+
     //De entity a DTO
     private UserDTO showUser(UserEntity userEntity) {
         UserDTO userDTO = new UserDTO();

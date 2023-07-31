@@ -51,7 +51,10 @@ public class SecurityConfig {
 				.csrf(config -> config.disable())
 				.cors(config -> config.configurationSource(corsConfigurationSource))
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/api/users/createUser","/api/users/validTokenEmail/**").permitAll();
+					auth.requestMatchers("/api/users/createUser").permitAll();
+					auth.requestMatchers("/api/users/validTokenEmail/**").permitAll();
+					auth.requestMatchers("/api/users/resendValidEmail/**").permitAll();
+					auth.requestMatchers("/api/users/emailIsVerify/**").permitAll();
 					auth.anyRequest().authenticated();
 				})
 				.sessionManagement(session -> {

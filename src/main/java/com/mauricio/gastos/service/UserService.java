@@ -21,4 +21,6 @@ public interface UserService {
     boolean validEmail(String email);
 
     boolean validTokenEmail(String token);
+
+    boolean emailIsVerify(String username);
 }

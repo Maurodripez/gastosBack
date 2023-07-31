@@ -1,6 +1,7 @@
 package com.mauricio.gastos.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.mauricio.gastos.DTO.RoleDTO;
 import com.mauricio.gastos.service.EmailServiceImpl;
@@ -14,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.mauricio.gastos.DTO.UserDTO;
-import com.mauricio.gastos.repositories.UserRepository;
 
 import jakarta.validation.Valid;
 
@@ -29,9 +29,6 @@ public class UserController {
 
 	@Autowired
 	private UserServiceImpl userService;
-	
-	@Autowired
-	UserRepository userRepository;
 
 	@GetMapping("/getUsers")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -112,5 +109,21 @@ public class UserController {
 		}
 	}
 
+	@GetMapping("/resendValidEmail/{username}")
+	public ResponseEntity<?> resendValidationEmail(@PathVariable String username) {
+		try {
+			if (emailService.resendValidationEmail(username)) {
+				return ResponseEntity.ok().build();
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+		} catch (Exception ignored) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
+	@GetMapping("/emailIsVerify/{username}")
+	public boolean emailIsValidated(@PathVariable String username){
+			return userService.emailIsVerify(username);
+	}
 }
