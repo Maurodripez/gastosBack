@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +21,7 @@ import com.mauricio.gastos.service.UserDetailsServiceImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	@Autowired
@@ -34,8 +34,7 @@ public class SecurityConfig {
 	JwtAuthorizationFilter jwtAuthorizationFilter;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager)
-			throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
 		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
 		jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
 		jwtAuthenticationFilter.setFilterProcessesUrl("/login");
@@ -52,7 +51,10 @@ public class SecurityConfig {
 				.csrf(config -> config.disable())
 				.cors(config -> config.configurationSource(corsConfigurationSource))
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/api/users/prueba").permitAll();
+					auth.requestMatchers("/api/users/createUser").permitAll();
+					auth.requestMatchers("/api/users/validTokenEmail/**").permitAll();
+					auth.requestMatchers("/api/users/resendValidEmail/**").permitAll();
+					auth.requestMatchers("/api/users/emailIsVerify/**").permitAll();
 					auth.anyRequest().authenticated();
 				})
 				.sessionManagement(session -> {

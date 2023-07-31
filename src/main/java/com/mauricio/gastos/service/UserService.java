@@ -4,6 +4,7 @@ import com.mauricio.gastos.DTO.UserDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -14,4 +15,12 @@ public interface UserService {
     ResponseEntity<?> deleteUser(Long userId);
 
     UserDTO updateUser(Long userId, UserDTO userDTO);
+
+    boolean validUsername(String username);
+
+    boolean validEmail(String email);
+
+    boolean validTokenEmail(String token);
+
+    boolean emailIsVerify(String username);
 }

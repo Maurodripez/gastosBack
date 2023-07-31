@@ -34,6 +34,16 @@ public class JwtUtils {
 				.signWith(getSignatureKey(),SignatureAlgorithm.HS256)
 				.compact();
 	}
+
+	//Generar token para verificar correo
+	public String generateTokenValidate(String userName) {
+		return Jwts.builder()
+				.setSubject(userName)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis()+Long.parseLong(String.valueOf(24 * 60 * 60 * 1000))))
+				.signWith(getSignatureKey(),SignatureAlgorithm.HS256)
+				.compact();
+	}
 	
 	// Validar el token de acceso
 	public boolean isTokenValid(String token) {

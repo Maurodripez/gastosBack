@@ -29,5 +29,9 @@ public class UserDTO {
 	
 	private Set<String> roles;
 
+	private String name;
+
+	private String lastname;
+
 	private String token;
 }

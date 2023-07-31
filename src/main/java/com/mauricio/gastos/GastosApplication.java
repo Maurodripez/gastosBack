@@ -1,22 +1,17 @@
 package com.mauricio.gastos;
 
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.mauricio.gastos.models.ERole;
-import com.mauricio.gastos.models.RoleEntity;
-import com.mauricio.gastos.models.UserEntity;
-import com.mauricio.gastos.repositories.UserRepository;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 @SpringBootApplication
 public class GastosApplication {
 
+	@Autowired
+	static
+	JavaMailSender javaMailSender;
 	public static void main(String[] args) {
 		SpringApplication.run(GastosApplication.class, args);
 	}
