@@ -55,6 +55,7 @@ public class SecurityConfig {
 					auth.requestMatchers("/api/users/validTokenEmail/**").permitAll();
 					auth.requestMatchers("/api/users/resendValidEmail/**").permitAll();
 					auth.requestMatchers("/api/users/emailIsVerify/**").permitAll();
+					auth.requestMatchers("doc/**").permitAll();
 					auth.anyRequest().authenticated();
 				})
 				.sessionManagement(session -> {
